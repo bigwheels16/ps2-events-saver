@@ -146,7 +146,7 @@ CREATE INDEX idx8 ON character_info(character_id);
 CREATE INDEX idx9 ON character_info(outfit_id);
 CREATE INDEX idx10 ON vehicle_destroy_event(world_id, character_vehicle_id);
 CREATE INDEX idx11 ON death_event(world_id, timestamp);
-CREATE INDEX idx12 ON death_event_aggregate(world_id, character_loadout_id);
+--CREATE INDEX idx12 ON death_event_aggregate(world_id, character_loadout_id);
 CREATE INDEX idx13 ON death_event(attacker_weapon_id);
 CREATE INDEX idx14 ON loadout_info(loadout_id);
 
