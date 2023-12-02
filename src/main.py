@@ -105,7 +105,7 @@ def on_message(ws, message):
         else:
             raise Exception("Unknown event: %s" % obj)
         
-      elif _type == "heartbeat":
+    elif _type == "heartbeat":
         pass
     elif obj.get("connected") == "true":
         logger.info(obj)
