@@ -69,7 +69,7 @@ class Service:
         )
 
     def insert_vehicle_destroy_event(self, faction_id, attacker_loadout_id, attacker_weapon_id, attacker_vehicle_id, attacker_character_id, character_vehicle_id, character_id, zone_id, world_id, timestamp):
-        return db.exec("INSERT INTO death_event (faction_id, attacker_loadout_id, attacker_weapon_id, attacker_vehicle_id, attacker_character_id, character_vehicle_id, character_id, zone_id, world_id, timestamp) "
+        return db.exec("INSERT INTO vehicle_destroy_event (faction_id, attacker_loadout_id, attacker_weapon_id, attacker_vehicle_id, attacker_character_id, character_vehicle_id, character_id, zone_id, world_id, timestamp) "
                         "VALUES (:faction_id, :attacker_loadout_id, :attacker_weapon_id, :attacker_vehicle_id, :attacker_character_id, :character_vehicle_id, :character_id, :zone_id, :world_id, :timestamp)",
             {
                 "faction_id": faction_id,
