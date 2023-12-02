@@ -150,5 +150,5 @@ CREATE INDEX idx11 ON death_event(world_id, timestamp);
 CREATE INDEX idx13 ON death_event(attacker_weapon_id);
 CREATE INDEX idx14 ON loadout_info(loadout_id);
 
-CREATE INDEX idx15 ON gain_experience_event(match_id);
-CREATE INDEX idx16 ON vehicle_destroy_event(match_id);
+--CREATE INDEX idx15 ON gain_experience_event(match_id);
+--CREATE INDEX idx16 ON vehicle_destroy_event(match_id);
