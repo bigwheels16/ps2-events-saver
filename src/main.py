@@ -61,7 +61,7 @@ def on_message(ws, message):
                 payload["attacker_weapon_id"],
                 payload["attacker_vehicle_id"],
                 payload["attacker_character_id"],
-                payload["character_vehicle_id"],
+                payload["vehicle_id"],
                 payload["character_id"],
                 payload["zone_id"],
                 payload["world_id"],
@@ -112,8 +112,10 @@ def on_message(ws, message):
         ws.send(json.dumps({
             "service": "event",
             "action": "subscribe",
+            "characters": ["all"],
             "worlds": config.PS2_STREAMING_API_SUBSCRIBE_WORLDS(),
             "eventNames": config.PS2_STREAMING_API_SUBSCRIBE_EVENTS(),
+            "logicalAndCharactersWithWorlds": True,
         }))
     else:
         logger.info("Received ws: %s", obj)
