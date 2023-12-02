@@ -1,26 +1,26 @@
-CREATE TABLE player_login_event (id SERIAL PRIMARY KEY, character_id BIGINT NOT NULL, world_id TINYINT NOT NULL, timestamp INT NOT NULL);
-CREATE TABLE player_logout_event (id SERIAL PRIMARY KEY, character_id BIGINT NOT NULL, world_id TINYINT NOT NULL, timestamp INT NOT NULL);
+CREATE TABLE player_login_event (id SERIAL PRIMARY KEY, character_id BIGINT NOT NULL, world_id SMALLINT NOT NULL, timestamp INT NOT NULL);
+CREATE TABLE player_logout_event (id SERIAL PRIMARY KEY, character_id BIGINT NOT NULL, world_id SMALLINT NOT NULL, timestamp INT NOT NULL);
 
-CREATE TABLE gain_experience_event (id SERIAL PRIMARY KEY, amount SMALLINT NOT NULL, loadout_id TINYINT NOT NULL, experience_id SMALLINT NOT NULL, other_id BIGINT NOT NULL, character_id BIGINT NOT NULL, zone_id INT NOT NULL, world_id TINYINT NOT NULL, timestamp INT NOT NULL);
+CREATE TABLE gain_experience_event (id SERIAL PRIMARY KEY, amount SMALLINT NOT NULL, loadout_id SMALLINT NOT NULL, experience_id SMALLINT NOT NULL, other_id BIGINT NOT NULL, character_id BIGINT NOT NULL, zone_id INT NOT NULL, world_id SMALLINT NOT NULL, timestamp INT NOT NULL);
 
-CREATE TABLE death_event (id SERIAL PRIMARY KEY, is_headshot TINYINT NOT NULL, attacker_loadout_id TINYINT NOT NULL, attacker_fire_mode_id INT NOT NULL, attacker_weapon_id INT NOT NULL, attacker_vehicle_id SMALLINT NOT NULL, attacker_character_id BIGINT NOT NULL, character_loadout_id TINYINT NOT NULL, character_id BIGINT NOT NULL, zone_id INT NOT NULL, world_id TINYINT NOT NULL, timestamp INT NOT NULL);
-CREATE TABLE vehicle_destroy_event (id SERIAL PRIMARY KEY, faction_id TINYINT NOT NULL, attacker_loadout_id TINYINT NOT NULL, attacker_weapon_id INT NOT NULL, attacker_vehicle_id SMALLINT NOT NULL, attacker_character_id BIGINT NOT NULL, character_vehicle_id SMALLINT NOT NULL, character_id BIGINT NOT NULL, zone_id INT NOT NULL, world_id TINYINT NOT NULL, timestamp INT NOT NULL);
+CREATE TABLE death_event (id SERIAL PRIMARY KEY, is_headshot SMALLINT NOT NULL, attacker_loadout_id SMALLINT NOT NULL, attacker_fire_mode_id INT NOT NULL, attacker_weapon_id INT NOT NULL, attacker_vehicle_id SMALLINT NOT NULL, attacker_character_id BIGINT NOT NULL, character_loadout_id SMALLINT NOT NULL, character_id BIGINT NOT NULL, zone_id INT NOT NULL, world_id SMALLINT NOT NULL, timestamp INT NOT NULL);
+CREATE TABLE vehicle_destroy_event (id SERIAL PRIMARY KEY, faction_id SMALLINT NOT NULL, attacker_loadout_id SMALLINT NOT NULL, attacker_weapon_id INT NOT NULL, attacker_vehicle_id SMALLINT NOT NULL, attacker_character_id BIGINT NOT NULL, character_vehicle_id SMALLINT NOT NULL, character_id BIGINT NOT NULL, zone_id INT NOT NULL, world_id SMALLINT NOT NULL, timestamp INT NOT NULL);
 
-CREATE TABLE facility_defend_event (id SERIAL PRIMARY KEY, character_id BIGINT NOT NULL, outfit_id BIGINT NOT NULL, facility_id INT NOT NULL, zone_id INT NOT NULL, world_id TINYINT NOT NULL, timestamp INT NOT NULL);
-CREATE TABLE facility_capture_event (id SERIAL PRIMARY KEY, character_id BIGINT NOT NULL, outfit_id BIGINT NOT NULL, facility_id INT NOT NULL, zone_id INT NOT NULL, world_id TINYINT NOT NULL, timestamp INT NOT NULL);
+CREATE TABLE facility_defend_event (id SERIAL PRIMARY KEY, character_id BIGINT NOT NULL, outfit_id BIGINT NOT NULL, facility_id INT NOT NULL, zone_id INT NOT NULL, world_id SMALLINT NOT NULL, timestamp INT NOT NULL);
+CREATE TABLE facility_capture_event (id SERIAL PRIMARY KEY, character_id BIGINT NOT NULL, outfit_id BIGINT NOT NULL, facility_id INT NOT NULL, zone_id INT NOT NULL, world_id SMALLINT NOT NULL, timestamp INT NOT NULL);
 
-CREATE TABLE facility_control_event (id SERIAL PRIMARY KEY, duration_held INT NOT NULL, facility_id INT NOT NULL, old_faction_id INT NOT NULL, new_faction_id INT NOT NULL, outfit_id BIGINT NOT NULL, zone_id INT NOT NULL, world_id TINYINT NOT NULL, timestamp INT NOT NULL);
+CREATE TABLE facility_control_event (id SERIAL PRIMARY KEY, duration_held INT NOT NULL, facility_id INT NOT NULL, old_faction_id INT NOT NULL, new_faction_id INT NOT NULL, outfit_id BIGINT NOT NULL, zone_id INT NOT NULL, world_id SMALLINT NOT NULL, timestamp INT NOT NULL);
 
-CREATE TABLE character_info (character_id BIGINT PRIMARY KEY, name VARCHAR(255) NOT NULL, outfit_id BIGINT NOT NULL, member_since INT NOT NULL, created_at INT NOT NULL, minutes_played INT NOT NULL, battle_rank INT NOT NULL, is_prestige TINYINT NOT NULL, world_id TINYINT NOT NULL, last_login INT NOT NULL);
+CREATE TABLE character_info (character_id BIGINT PRIMARY KEY, name VARCHAR(255) NOT NULL, outfit_id BIGINT NOT NULL, member_since INT NOT NULL, created_at INT NOT NULL, minutes_played INT NOT NULL, battle_rank INT NOT NULL, is_prestige SMALLINT NOT NULL, world_id SMALLINT NOT NULL, last_login INT NOT NULL);
 CREATE TABLE outfit_info (outfit_id BIGINT PRIMARY KEY, alias VARCHAR(4) NOT NULL, name VARCHAR(255) NOT NULL, faction_id SMALLINT NOT NULL);
-CREATE TABLE weapon_info (item_id INT PRIMARY KEY, weapon_id INT, name VARCHAR(50) NOT NULL, faction_id SMALLINT NOT NULL, vehicle_id INT NOT NULL, vehicle_slot_id INT NOT NULL, is_used TINYINT NOT NULL);
+CREATE TABLE weapon_info (item_id INT PRIMARY KEY, weapon_id INT, name VARCHAR(50) NOT NULL, faction_id SMALLINT NOT NULL, vehicle_id INT NOT NULL, vehicle_slot_id INT NOT NULL, is_used SMALLINT NOT NULL);
 --UPDATE weapon_info w JOIN (SELECT DISTINCT attacker_weapon_id FROM vehicle_destroy_event) t ON w.item_id = t.attacker_weapon_id SET is_used = 1;
 
 CREATE TABLE facility_info (facility_id INT PRIMARY KEY, zone_id INT NOT NULL, name VARCHAR(50) NOT NULL);
 
 --CREATE TABLE death_event_aggregate (num_kills INT NOT NULL, attacker_weapon_id INT NOT NULL, attacker_vehicle_id INT NOT NULL, character_loadout_id SMALLINT NOT NULL, world_id SMALLINT NOT NULL);
 
-CREATE TABLE zone_info (zone_id TINYINT NOT NULL, name VARCHAR(50) NOT NULL);
+CREATE TABLE zone_info (zone_id SMALLINT NOT NULL, name VARCHAR(50) NOT NULL);
 INSERT INTO zone_info (zone_id, name) VALUES (2, 'Indar');
 INSERT INTO zone_info (zone_id, name) VALUES (4, 'Hossin');
 INSERT INTO zone_info (zone_id, name) VALUES (6, 'Amerish');
