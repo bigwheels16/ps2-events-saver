@@ -20,6 +20,8 @@ CREATE TABLE facility_info (facility_id INT PRIMARY KEY, zone_id INT NOT NULL, n
 
 --CREATE TABLE death_event_aggregate (num_kills INT NOT NULL, attacker_weapon_id INT NOT NULL, attacker_vehicle_id INT NOT NULL, character_loadout_id SMALLINT NOT NULL, world_id SMALLINT NOT NULL);
 
+CREATE TABLE matches (name VARCHAR(255) NOT NULL, zone_id INT NOT NULL, match_id SMALLINT NOT NULL);
+
 CREATE TABLE zone_info (zone_id SMALLINT NOT NULL, name VARCHAR(50) NOT NULL);
 INSERT INTO zone_info (zone_id, name) VALUES (2, 'Indar');
 INSERT INTO zone_info (zone_id, name) VALUES (4, 'Hossin');
@@ -38,8 +40,6 @@ INSERT INTO world_info (world_id, name) VALUES (19, 'Jaeger');
 INSERT INTO world_info (world_id, name) VALUES (24, 'Apex');
 INSERT INTO world_info (world_id, name) VALUES (25, 'Briggs');
 INSERT INTO world_info (world_id, name) VALUES (40, 'SolTech');
-
-CREATE TABLE matches (name VARCHAR(255) NOT NULL, zone_id INT NOT NULL);
 
 --DROP TABLE player_login_event; DROP TABLE player_logout_event; DROP TABLE gain_experience_event; DROP TABLE death_event; DROP TABLE vehicle_destroy_event; DROP TABLE facility_capture_event; DROP TABLE facility_defend_event; DROP TABLE character_info;
 
