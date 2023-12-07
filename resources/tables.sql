@@ -20,8 +20,6 @@ CREATE TABLE facility_info (facility_id INT PRIMARY KEY, zone_id INT NOT NULL, n
 
 --CREATE TABLE death_event_aggregate (num_kills INT NOT NULL, attacker_weapon_id INT NOT NULL, attacker_vehicle_id INT NOT NULL, character_loadout_id SMALLINT NOT NULL, world_id SMALLINT NOT NULL);
 
-CREATE TABLE matches (name VARCHAR(255) NOT NULL, zone_id INT NOT NULL, match_id SMALLINT NOT NULL);
-
 CREATE TABLE zone_info (zone_id SMALLINT NOT NULL, name VARCHAR(50) NOT NULL);
 INSERT INTO zone_info (zone_id, name) VALUES (2, 'Indar');
 INSERT INTO zone_info (zone_id, name) VALUES (4, 'Hossin');
@@ -150,5 +148,3 @@ CREATE INDEX idx11 ON death_event(world_id, timestamp);
 CREATE INDEX idx13 ON death_event(attacker_weapon_id);
 CREATE INDEX idx14 ON loadout_info(loadout_id);
 
---CREATE INDEX idx15 ON gain_experience_event(match_id);
---CREATE INDEX idx16 ON vehicle_destroy_event(match_id);
