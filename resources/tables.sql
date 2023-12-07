@@ -148,3 +148,10 @@ CREATE INDEX idx11 ON death_event(world_id, timestamp);
 CREATE INDEX idx13 ON death_event(attacker_weapon_id);
 CREATE INDEX idx14 ON loadout_info(loadout_id);
 
+CREATE INDEX idx15 ON gain_experience_event(zone_id);
+CREATE INDEX idx16 ON death_event(zone_id);
+CREATE INDEX idx17 ON vehicle_destroy_event(zone_id);
+CREATE INDEX idx18 ON facility_defend_event(zone_id);
+CREATE INDEX idx19 ON facility_capture_event(zone_id);
+CREATE INDEX idx20 ON facility_control_event(zone_id);
+
