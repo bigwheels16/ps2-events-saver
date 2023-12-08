@@ -34,9 +34,9 @@ INSERT INTO world_info (world_id, name) VALUES (1, 'Connery');
 INSERT INTO world_info (world_id, name) VALUES (10, 'Miller');
 INSERT INTO world_info (world_id, name) VALUES (13, 'Cobalt');
 INSERT INTO world_info (world_id, name) VALUES (17, 'Emerald');
-INSERT INTO world_info (world_id, name) VALUES (19, 'Jaeger');
-INSERT INTO world_info (world_id, name) VALUES (24, 'Apex');
-INSERT INTO world_info (world_id, name) VALUES (25, 'Briggs');
+--INSERT INTO world_info (world_id, name) VALUES (19, 'Jaeger');
+--INSERT INTO world_info (world_id, name) VALUES (24, 'Apex');
+--INSERT INTO world_info (world_id, name) VALUES (25, 'Briggs');
 INSERT INTO world_info (world_id, name) VALUES (40, 'SolTech');
 
 --DROP TABLE player_login_event; DROP TABLE player_logout_event; DROP TABLE gain_experience_event; DROP TABLE death_event; DROP TABLE vehicle_destroy_event; DROP TABLE facility_capture_event; DROP TABLE facility_defend_event; DROP TABLE character_info;

@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 last_message_received_at = 0
 alt_login_threshold_seconds = 15
-min_zone_id = 1000
+min_zone_id = config.MIN_ZONE_ID()
 
 char_list = {}
 

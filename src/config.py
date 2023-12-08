@@ -37,6 +37,10 @@ def PS2_STREAMING_API_SUBSCRIBE_EVENTS():
     return get_env_string("PS2_STREAMING_API_SUBSCRIBE_EVENTS").split(",")
 
 
+def MIN_ZONE_ID():
+    return int(get_env_string("MIN_ZONE_ID"))
+
+
 def get_env_bool(name, default=None):
     val = os.environ.get(name)
     if val is None:
