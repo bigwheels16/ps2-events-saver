@@ -11,9 +11,13 @@ CREATE TABLE facility_capture_event (id SERIAL PRIMARY KEY, character_id BIGINT 
 
 CREATE TABLE facility_control_event (id SERIAL PRIMARY KEY, duration_held INT NOT NULL, facility_id INT NOT NULL, old_faction_id INT NOT NULL, new_faction_id INT NOT NULL, outfit_id BIGINT NOT NULL, zone_id INT NOT NULL, world_id SMALLINT NOT NULL, timestamp INT NOT NULL);
 
-CREATE TABLE character_info (character_id BIGINT PRIMARY KEY, name VARCHAR(255) NOT NULL, outfit_id BIGINT NOT NULL, member_since INT NOT NULL, created_at INT NOT NULL, minutes_played INT NOT NULL, battle_rank INT NOT NULL, is_prestige SMALLINT NOT NULL, world_id SMALLINT NOT NULL, last_login INT NOT NULL);
-CREATE TABLE outfit_info (outfit_id BIGINT PRIMARY KEY, alias VARCHAR(4) NOT NULL, name VARCHAR(255) NOT NULL, faction_id SMALLINT NOT NULL);
-CREATE TABLE weapon_info (item_id INT PRIMARY KEY, weapon_id INT, name VARCHAR(50) NOT NULL, faction_id SMALLINT NOT NULL, vehicle_id INT NOT NULL, vehicle_slot_id INT NOT NULL, is_used SMALLINT NOT NULL);
+CREATE TABLE character_info (character_id BIGINT PRIMARY KEY, name VARCHAR(255) NOT NULL, faction_id SMALLINT NOT NULL, outfit_id BIGINT NOT NULL, member_since INT NOT NULL, created_at INT NOT NULL, minutes_played INT NOT NULL, battle_rank INT NOT NULL, is_prestige SMALLINT NOT NULL, world_id SMALLINT NOT NULL, last_login INT NOT NULL, saved_at INT NOT NULL);
+
+CREATE TABLE weapon_info (item_id INT PRIMARY KEY, weapon_id INT, name VARCHAR(50) NOT NULL, faction_id SMALLINT NOT NULL, vehicle_id INT NOT NULL, vehicle_slot_id INT NOT NULL, is_used SMALLINT NOT NULL, saved_at INT NOT NULL);
+INSERT INTO weapon_info (item_id, weapon_id, name, faction_id, vehicle_id, vehicle_slot_id, is_used, saved_at) VALUES (0, -1, 'None', 0, 0, 0, 1, 0);
+
+CREATE TABLE outfit_info (outfit_id BIGINT PRIMARY KEY, alias VARCHAR(4) NOT NULL, name VARCHAR(255) NOT NULL, faction_id SMALLINT NOT NULL, saved_at INT NOT NULL);
+INSERT INTO outfit_info (outfit_id, alias, name, faction_id, saved_at, 0) VALUES (0, 'N/A', 'N/A', 0);
 --UPDATE weapon_info w JOIN (SELECT DISTINCT attacker_weapon_id FROM vehicle_destroy_event) t ON w.item_id = t.attacker_weapon_id SET is_used = 1;
 
 CREATE TABLE facility_info (facility_id INT PRIMARY KEY, zone_id INT NOT NULL, name VARCHAR(50) NOT NULL);
