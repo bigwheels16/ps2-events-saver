@@ -17,7 +17,7 @@ CREATE TABLE weapon_info (item_id INT PRIMARY KEY, weapon_id INT, name VARCHAR(5
 INSERT INTO weapon_info (item_id, weapon_id, name, faction_id, vehicle_id, vehicle_slot_id, is_used, saved_at) VALUES (0, -1, 'None', 0, 0, 0, 1, 0);
 
 CREATE TABLE outfit_info (outfit_id BIGINT PRIMARY KEY, alias VARCHAR(4) NOT NULL, name VARCHAR(255) NOT NULL, faction_id SMALLINT NOT NULL, saved_at INT NOT NULL);
-INSERT INTO outfit_info (outfit_id, alias, name, faction_id, saved_at, 0) VALUES (0, 'N/A', 'N/A', 0);
+INSERT INTO outfit_info (outfit_id, alias, name, faction_id, saved_at) VALUES (0, 'N/A', 'N/A', 0, 0);
 --UPDATE weapon_info w JOIN (SELECT DISTINCT attacker_weapon_id FROM vehicle_destroy_event) t ON w.item_id = t.attacker_weapon_id SET is_used = 1;
 
 CREATE TABLE facility_info (facility_id INT PRIMARY KEY, zone_id INT NOT NULL, name VARCHAR(50) NOT NULL);

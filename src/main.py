@@ -4,7 +4,7 @@ import rel
 import json
 import websocket
 import logging
-from service import Service
+import service
 import config
 
 
@@ -15,20 +15,17 @@ last_message_received_at = 0
 alt_login_threshold_seconds = 15
 min_zone_id = config.MIN_ZONE_ID()
 
-char_list = {}
-
-service = Service()
-
 
 def on_message(ws, message):
+    global last_message_received_at
     last_message_received_at = int(time.time())
 
     obj = json.loads(message)
     _type = obj.get("type")
 
-    if _type == "serviceMessage":
-        #logger.info(message)
+    #logger.info(message)
 
+    if _type == "serviceMessage":
         payload = obj.get("payload")
         event_name = payload.get("event_name")
         
@@ -140,6 +137,15 @@ def on_open(ws):
     logger.info("connected!")
 
 
+def verify_messages_received():
+    time_since_last_message = int(time.time()) - last_message_received_at
+    if time_since_last_message > 60:
+        logger.error(f"no message received for {time_since_last_message}s, stopping")
+        rel.abort()
+    else:
+        rel.timeout(21, verify_messages_received)
+
+
 if __name__ == "__main__":
     # websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
@@ -151,4 +157,5 @@ if __name__ == "__main__":
     
     ws.run_forever(dispatcher=rel, reconnect=5)
     rel.signal(2, rel.abort)
+    rel.timeout(21, verify_messages_received)
     rel.dispatch()
