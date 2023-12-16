@@ -12,13 +12,15 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=loggin
 logger = logging.getLogger(__name__)
 
 last_message_received_at = 0
+num_messages_received = 0
 alt_login_threshold_seconds = 15
 min_zone_id = config.MIN_ZONE_ID()
 
 
 def on_message(ws, message):
-    global last_message_received_at
+    global last_message_received_at, num_messages_received
     last_message_received_at = int(time.time())
+    num_messages_received += 1
 
     obj = json.loads(message)
     _type = obj.get("type")
@@ -146,6 +148,11 @@ def verify_messages_received():
         rel.timeout(21, verify_messages_received)
 
 
+def log_num_messages_received():
+    logger.info(f"messages received: {num_messages_received}")
+    rel.timeout(1800, log_num_messages_received)
+
+
 if __name__ == "__main__":
     # websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
@@ -158,4 +165,5 @@ if __name__ == "__main__":
     ws.run_forever(dispatcher=rel, reconnect=5)
     rel.signal(2, rel.abort)
     rel.timeout(21, verify_messages_received)
+    rel.timeout(1800, log_num_messages_received)
     rel.dispatch()
