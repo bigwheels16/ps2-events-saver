@@ -15,6 +15,7 @@ last_message_received_at = 0
 num_messages_received = 0
 alt_login_threshold_seconds = 15
 min_zone_id = config.MIN_ZONE_ID()
+max_zone_id = 10000000
 
 
 def on_message(ws, message):
@@ -32,7 +33,7 @@ def on_message(ws, message):
         event_name = payload.get("event_name")
         
         if event_name == "GainExperience":
-            if int(payload["zone_id"]) > min_zone_id:
+            if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_gain_experience_event(
                     payload["amount"],
                     payload["loadout_id"],
@@ -43,7 +44,7 @@ def on_message(ws, message):
                     payload["world_id"],
                     payload["timestamp"])
         elif event_name == "Death":
-            if int(payload["zone_id"]) > min_zone_id:
+            if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_death_event(
                     payload["is_headshot"],
                     payload["attacker_loadout_id"],
@@ -57,7 +58,7 @@ def on_message(ws, message):
                     payload["world_id"],
                     payload["timestamp"])
         elif event_name == "VehicleDestroy":
-            if int(payload["zone_id"]) > min_zone_id:
+            if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_vehicle_destroy_event(
                     payload["faction_id"],
                     payload["attacker_loadout_id"],
@@ -80,7 +81,7 @@ def on_message(ws, message):
                 payload["world_id"],
                 payload["timestamp"])
         elif event_name == "PlayerFacilityDefend":
-            if int(payload["zone_id"]) > min_zone_id:
+            if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_facility_defend_event(
                     payload["character_id"],
                     payload["outfit_id"],
@@ -89,7 +90,7 @@ def on_message(ws, message):
                     payload["world_id"],
                     payload["timestamp"])
         elif event_name == "PlayerFacilityCapture":
-            if int(payload["zone_id"]) > min_zone_id:
+            if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_facility_capture_event(
                     payload["character_id"],
                     payload["outfit_id"],
@@ -98,7 +99,7 @@ def on_message(ws, message):
                     payload["world_id"],
                     payload["timestamp"])
         elif event_name == "FacilityControl":
-            if int(payload["zone_id"]) > min_zone_id:
+            if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_facility_control_event(
                     payload["duration_held"],
                     payload["facility_id"],
@@ -161,7 +162,7 @@ if __name__ == "__main__":
         on_message=on_message,
         on_error=on_error,
         on_close=on_close)
-    
+
     ws.run_forever(dispatcher=rel, reconnect=5)
     rel.signal(2, rel.abort)
     rel.timeout(21, verify_messages_received)
