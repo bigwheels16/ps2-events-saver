@@ -13,14 +13,26 @@ CREATE TABLE facility_control_event (id SERIAL PRIMARY KEY, duration_held INT NO
 
 CREATE TABLE character_info (character_id BIGINT PRIMARY KEY, name VARCHAR(255) NOT NULL, faction_id SMALLINT NOT NULL, outfit_id BIGINT NOT NULL, member_since INT NOT NULL, created_at INT NOT NULL, minutes_played INT NOT NULL, battle_rank INT NOT NULL, is_prestige SMALLINT NOT NULL, world_id SMALLINT NOT NULL, last_login INT NOT NULL, saved_at INT NOT NULL);
 
-CREATE TABLE weapon_info (item_id INT PRIMARY KEY, weapon_id INT, name VARCHAR(50) NOT NULL, faction_id SMALLINT NOT NULL, vehicle_id INT NOT NULL, vehicle_slot_id INT NOT NULL, is_used SMALLINT NOT NULL, saved_at INT NOT NULL);
-INSERT INTO weapon_info (item_id, weapon_id, name, faction_id, vehicle_id, vehicle_slot_id, is_used, saved_at) VALUES (0, -1, 'None', 0, 0, 0, 1, 0);
+CREATE TABLE weapon_info (item_id INT PRIMARY KEY, weapon_id INT, name VARCHAR(50) NOT NULL, faction_id SMALLINT NOT NULL, vehicle_id INT NOT NULL, vehicle_slot_id INT NOT NULL, saved_at INT NOT NULL);
+INSERT INTO weapon_info (item_id, weapon_id, name, faction_id, vehicle_id, vehicle_slot_id, saved_at) VALUES (0, -1, 'None', 0, 0, 0, 0);
 
-CREATE TABLE outfit_info (outfit_id BIGINT PRIMARY KEY, alias VARCHAR(4) NOT NULL, name VARCHAR(255) NOT NULL, faction_id SMALLINT NOT NULL, saved_at INT NOT NULL);
-INSERT INTO outfit_info (outfit_id, alias, name, faction_id, saved_at) VALUES (0, 'N/A', 'N/A', 0, 0);
+CREATE TABLE outfit_info (outfit_id BIGINT PRIMARY KEY, alias VARCHAR(4) NOT NULL, name VARCHAR(255) NOT NULL, faction_id SMALLINT NOT NULL, world_id SMALLINT NOT NULL, saved_at INT NOT NULL);
+INSERT INTO outfit_info (outfit_id, alias, name, faction_id, world_id, saved_at) VALUES (0, 'N/A', 'N/A', 0, 0, 0);
 --UPDATE weapon_info w JOIN (SELECT DISTINCT attacker_weapon_id FROM vehicle_destroy_event) t ON w.item_id = t.attacker_weapon_id SET is_used = 1;
 
 CREATE TABLE facility_info (facility_id INT PRIMARY KEY, zone_id INT NOT NULL, name VARCHAR(50) NOT NULL);
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310500, 10, 'Arazek SATCOM Hub');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310510, 10, 'Nexus Secure Substation');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310520, 10, 'Hydroponics Compound');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310530, 10, 'The Granitehead Reactor');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310540, 10, 'Argent Pass');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310550, 10, 'Slate Canyon Hold');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310560, 10, 'Base 7');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310570, 10, 'Nexus Southwest Warpgate');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310580, 10, 'Base 9');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310590, 10, 'Bitter Gorge Garrison');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310600, 10, 'Nexus Alpha');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310610, 10, 'Base 12');
 
 --CREATE TABLE death_event_aggregate (num_kills INT NOT NULL, attacker_weapon_id INT NOT NULL, attacker_vehicle_id INT NOT NULL, character_loadout_id SMALLINT NOT NULL, world_id SMALLINT NOT NULL);
 
@@ -136,7 +148,6 @@ INSERT INTO experience_info (experience_id, description) VALUES (335, 'Savior Ki
 INSERT INTO experience_info (experience_id, description) VALUES (355, 'Squad Vehicle Spawn Bonus');
 INSERT INTO experience_info (experience_id, description) VALUES (592, 'Savior Kill (MAX)');
 
-
 CREATE INDEX idx1 ON gain_experience_event(character_id);
 CREATE INDEX idx2 ON death_event(character_id);
 CREATE INDEX idx3 ON death_event(attacker_character_id);
@@ -158,4 +169,3 @@ CREATE INDEX idx17 ON vehicle_destroy_event(zone_id);
 CREATE INDEX idx18 ON facility_defend_event(zone_id);
 CREATE INDEX idx19 ON facility_capture_event(zone_id);
 CREATE INDEX idx20 ON facility_control_event(zone_id);
-
