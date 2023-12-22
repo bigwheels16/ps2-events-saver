@@ -150,7 +150,7 @@ def verify_messages_received():
 
 
 def log_num_messages_received():
-    logger.info(f"messages received: {num_messages_received}")
+    logger.info(f"messages received: {num_messages_received:,}")
     rel.timeout(1800, log_num_messages_received)
 
 
@@ -166,5 +166,5 @@ if __name__ == "__main__":
     ws.run_forever(dispatcher=rel, reconnect=5)
     rel.signal(2, rel.abort)
     rel.timeout(21, verify_messages_received)
-    rel.timeout(1800, log_num_messages_received)
+    rel.timeout(10, log_num_messages_received)
     rel.dispatch()
