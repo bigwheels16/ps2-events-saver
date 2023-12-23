@@ -1,3 +1,4 @@
+from multiprocessing import Queue
 import threading
 import time
 import rel
@@ -18,7 +19,7 @@ min_zone_id = config.MIN_ZONE_ID()
 max_zone_id = 10000000
 
 
-def on_message(ws, message):
+def process_message(ws, message):
     global last_message_received_at, num_messages_received
     last_message_received_at = int(time.time())
     num_messages_received += 1
@@ -126,14 +127,12 @@ def on_message(ws, message):
         }))
     else:
         logger.info("Received ws: %s", obj)
+    
+    #logger.info("processed msg")
 
 
 def on_error(ws, error):
     logger.error(error)
-
-
-def on_close(ws, close_status_code, close_msg):
-    logger.warning(close_status_code, close_msg)
 
 
 def on_open(ws):
@@ -155,16 +154,48 @@ def log_num_messages_received():
 
 
 if __name__ == "__main__":
+    q = Queue(50)
+
+    def add_message(ws, msg):
+        #logger.info("adding msg")
+        try:
+            q.put(msg, block=False)
+        except Exception as e:
+            logger.error("error adding message", exc_info=e)
+
+    def on_close(ws, close_status_code, close_msg):
+        logger.warning(close_status_code, close_msg)
+        q.close()
+
+    def abort():
+        logger.warning("shutting down")
+        q.close()
+        rel.abort()
+
     # websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
         config.PS2_STREAMING_API_URL(),
         on_open=on_open,
-        on_message=on_message,
+        on_message=add_message,
         on_error=on_error,
         on_close=on_close)
 
+    def worker():
+        try:
+            while True:
+                msg = q.get()
+                #logger.info("processing msg")
+                process_message(ws, msg)
+        except EOFError:
+            logger.info("queue closed")
+            return
+        except Exception as e:
+            logger.error("error in worker", exc_info=e)
+
+    threading.Thread(target=worker).start()
+
     ws.run_forever(dispatcher=rel, reconnect=5)
-    rel.signal(2, rel.abort)
+    rel.signal(2, abort)
     rel.timeout(21, verify_messages_received)
     rel.timeout(10, log_num_messages_received)
     rel.dispatch()
