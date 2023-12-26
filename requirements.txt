@@ -1,6 +1,6 @@
-websocket-client==1.6.4
+websocket-client==1.7.0
 requests==2.31.0
-rel==0.4.9
+rel==0.4.9.1
 
 SQLAlchemy==2.0.22
 cloud-sql-python-connector[pg8000]==1.4.2

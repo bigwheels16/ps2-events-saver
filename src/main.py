@@ -27,7 +27,7 @@ def process_message(ws, message):
     obj = json.loads(message)
     _type = obj.get("type")
 
-    #logger.info(message)
+    logger.info(message)
 
     if _type == "serviceMessage":
         payload = obj.get("payload")
@@ -132,7 +132,7 @@ def process_message(ws, message):
 
 
 def on_error(ws, error):
-    logger.error(error)
+    logger.error("error on web socket", exc_info=error)
 
 
 def on_open(ws):
@@ -144,13 +144,14 @@ def verify_messages_received():
     if time_since_last_message > 60:
         logger.error(f"no message received for {time_since_last_message}s, stopping")
         rel.abort()
-    else:
-        rel.timeout(21, verify_messages_received)
+
+    return True
 
 
 def log_num_messages_received():
     logger.info(f"messages received: {num_messages_received:,}")
-    rel.timeout(1800, log_num_messages_received)
+    #rel.timeout(1800, log_num_messages_received)
+    return True
 
 
 if __name__ == "__main__":
@@ -167,11 +168,6 @@ if __name__ == "__main__":
         logger.warning(close_status_code, close_msg)
         q.close()
 
-    def abort():
-        logger.warning("shutting down")
-        q.close()
-        rel.abort()
-
     # websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
         config.PS2_STREAMING_API_URL(),
@@ -179,7 +175,13 @@ if __name__ == "__main__":
         on_message=add_message,
         on_error=on_error,
         on_close=on_close)
-
+    
+    def abort():
+        logger.warning("shutting down")
+        ws.close()
+        q.close()
+        rel.abort()
+    
     def worker():
         try:
             while True:
@@ -194,8 +196,11 @@ if __name__ == "__main__":
 
     threading.Thread(target=worker).start()
 
-    ws.run_forever(dispatcher=rel, reconnect=5)
+    rel.set_sleep(0.003)
+    #rel.set_turbo(0.0001)
+
+    ws.run_forever(dispatcher=rel)
     rel.signal(2, abort)
     rel.timeout(21, verify_messages_received)
-    rel.timeout(10, log_num_messages_received)
+    rel.timeout(1800, log_num_messages_received)
     rel.dispatch()
