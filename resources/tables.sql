@@ -27,12 +27,12 @@ INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310520, 10, 'Hydr
 INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310530, 10, 'The Granitehead Reactor');
 INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310540, 10, 'Argent Pass');
 INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310550, 10, 'Slate Canyon Hold');
-INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310560, 10, 'Base 7');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310560, 10, 'Nexus Northeast Warpgate');
 INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310570, 10, 'Nexus Southwest Warpgate');
 INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310580, 10, 'Base 9');
 INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310590, 10, 'Bitter Gorge Garrison');
 INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310600, 10, 'Nexus Alpha');
-INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310610, 10, 'Base 12');
+INSERT INTO facility_info (facility_id, zone_id, name) VALUES (310610, 10, 'Nexus Omega');
 
 --CREATE TABLE death_event_aggregate (num_kills INT NOT NULL, attacker_weapon_id INT NOT NULL, attacker_vehicle_id INT NOT NULL, character_loadout_id SMALLINT NOT NULL, world_id SMALLINT NOT NULL);
 
