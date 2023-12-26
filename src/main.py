@@ -27,7 +27,7 @@ def process_message(ws, message):
     obj = json.loads(message)
     _type = obj.get("type")
 
-    logger.info(message)
+    #logger.debug(message)
 
     if _type == "serviceMessage":
         payload = obj.get("payload")
@@ -128,8 +128,6 @@ def process_message(ws, message):
     else:
         logger.info("Received ws: %s", obj)
     
-    #logger.info("processed msg")
-
 
 def on_error(ws, error):
     logger.error("error on web socket", exc_info=error)
@@ -150,7 +148,6 @@ def verify_messages_received():
 
 def log_num_messages_received():
     logger.info(f"messages received: {num_messages_received:,}")
-    #rel.timeout(1800, log_num_messages_received)
     return True
 
 
@@ -158,7 +155,6 @@ if __name__ == "__main__":
     q = Queue(50)
 
     def add_message(ws, msg):
-        #logger.info("adding msg")
         try:
             q.put(msg, block=False)
         except Exception as e:
@@ -186,7 +182,6 @@ if __name__ == "__main__":
         try:
             while True:
                 msg = q.get()
-                #logger.info("processing msg")
                 process_message(ws, msg)
         except EOFError:
             logger.info("queue closed")

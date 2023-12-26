@@ -1,5 +1,8 @@
 websocket-client==1.7.0
 requests==2.31.0
+
+# https://github.com/bubbleboy14/registeredeventlistener/tree/master
+# https://websocket-client.readthedocs.io/en/latest/examples.html
 rel==0.4.9.1
 
 SQLAlchemy==2.0.22
