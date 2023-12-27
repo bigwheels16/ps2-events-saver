@@ -36,6 +36,8 @@ project_name = f"projects/jkbff2"
 series = monitoring_v3.TimeSeries()
 series.metric.type = "custom.googleapis.com/test/num_messages_received"
 series.resource.type = "gce_instance"
+series.resource.labels["zone"] = "us-west1-b"
+series.resource.labels["instance_id"] = "4341436135170474862"
 series.metric.labels["TestLabel"] = "My Label Data"
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
@@ -178,15 +180,18 @@ def verify_messages_received():
 def log_num_messages_received():
     logger.info(f"messages received: {num_messages_received:,}")
     
-    now = time.time()
-    seconds = int(now)
-    nanos = int((now - seconds) * 10**9)
-    interval = monitoring_v3.TimeInterval(
-        {"end_time": {"seconds": seconds, "nanos": nanos}}
-    )
-    point = monitoring_v3.Point({"interval": interval, "value": {"int64_value": num_messages_received}})
-    series.points = [point]
-    client.create_time_series(name=project_name, time_series=[series])
+    try:
+        now = time.time()
+        seconds = int(now)
+        nanos = int((now - seconds) * 10**9)
+        interval = monitoring_v3.TimeInterval(
+            {"end_time": {"seconds": seconds, "nanos": nanos}}
+        )
+        point = monitoring_v3.Point({"interval": interval, "value": {"int64_value": num_messages_received}})
+        series.points = [point]
+        client.create_time_series(name=project_name, time_series=[series])
+    except Exception as e:
+        logger.error("error sending metrics", exc_info=e)
 
     return True
 
