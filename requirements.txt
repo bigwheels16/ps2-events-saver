@@ -1,5 +1,6 @@
 websocket-client==1.7.0
 requests==2.31.0
+google-cloud-monitoring==2.18.0
 
 # https://github.com/bubbleboy14/registeredeventlistener/tree/master
 # https://websocket-client.readthedocs.io/en/latest/examples.html

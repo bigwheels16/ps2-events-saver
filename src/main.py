@@ -8,6 +8,35 @@ import logging
 import service
 import config
 
+from google.api import label_pb2 as ga_label
+from google.api import metric_pb2 as ga_metric
+from google.cloud import monitoring_v3
+
+
+# https://cloud.google.com/monitoring/docs/samples/monitoring-create-metric#monitoring_create_metric-python
+# https://cloud.google.com/monitoring/api/v3/kinds-and-types
+client = monitoring_v3.MetricServiceClient()
+project_name = f"projects/jkbff2"
+#descriptor = ga_metric.MetricDescriptor()
+#descriptor.type = "custom.googleapis.com/test/num_messages_received"
+#descriptor.metric_kind = ga_metric.MetricDescriptor.MetricKind.CUMULATIVE
+#descriptor.value_type = ga_metric.MetricDescriptor.ValueType.INT64
+#descriptor.description = "This is a simple example of a custom metric."
+
+#labels = ga_label.LabelDescriptor()
+#labels.key = "TestLabel"
+#labels.value_type = ga_label.LabelDescriptor.ValueType.STRING
+#labels.description = "This is a test label for my medium blog"
+#descriptor.labels.append(labels)
+
+#descriptor = client.create_metric_descriptor(
+#    name=project_name, metric_descriptor=descriptor
+#)
+
+series = monitoring_v3.TimeSeries()
+series.metric.type = "custom.googleapis.com/test/num_messages_received"
+series.resource.type = "gce_instance"
+series.metric.labels["TestLabel"] = "My Label Data"
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -148,6 +177,17 @@ def verify_messages_received():
 
 def log_num_messages_received():
     logger.info(f"messages received: {num_messages_received:,}")
+    
+    now = time.time()
+    seconds = int(now)
+    nanos = int((now - seconds) * 10**9)
+    interval = monitoring_v3.TimeInterval(
+        {"end_time": {"seconds": seconds, "nanos": nanos}}
+    )
+    point = monitoring_v3.Point({"interval": interval, "value": {"int64_value": num_messages_received}})
+    series.points = [point]
+    client.create_time_series(name=project_name, time_series=[series])
+
     return True
 
 
@@ -197,5 +237,5 @@ if __name__ == "__main__":
     ws.run_forever(dispatcher=rel)
     rel.signal(2, abort)
     rel.timeout(21, verify_messages_received)
-    rel.timeout(1800, log_num_messages_received)
+    rel.timeout(60, log_num_messages_received)
     rel.dispatch()
