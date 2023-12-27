@@ -35,10 +35,10 @@ project_name = f"projects/jkbff2"
 
 series = monitoring_v3.TimeSeries()
 series.metric.type = "custom.googleapis.com/test/num_messages_received"
-series.resource.type = "gce_instance"
+series.resource.type = "gke_container"
 series.resource.labels["zone"] = "us-west1-b"
 series.resource.labels["instance_id"] = "4341436135170474862"
-series.metric.labels["TestLabel"] = "My Label Data"
+series.metric.labels["World"] = "MyWorld"
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
