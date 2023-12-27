@@ -37,13 +37,15 @@ series = monitoring_v3.TimeSeries()
 series.metric.type = "custom.googleapis.com/test/num_messages_received2"
 series.resource.type = "gke_container"
 series.resource.labels["zone"] = "us-west1-b"
-series.resource.labels["instance_id"] = "4341436135170474862"
+series.resource.labels["instance_id"] = "TODO"
 series.resource.labels["cluster_name"] = "cluster-2"
-series.resource.labels["namespace_id"] = "apps"
-series.resource.labels["pod_id"] = "my-pod"
+series.resource.labels["namespace_id"] = "TODO"
+series.resource.labels["pod_id"] = "TODO"
 series.resource.labels["container_name"] = "my-container"
 
-series.metric.labels["World"] = "MyWorld"
+series.metric.labels["Worker"] = config.DB_USERNAME()
+series.metric.labels["App"] = config.DB_NAME()
+
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
