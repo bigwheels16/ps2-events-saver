@@ -1,6 +1,7 @@
 from multiprocessing import Queue
 import threading
 import time
+import sys
 import rel
 import json
 import websocket
@@ -10,7 +11,7 @@ import config
 import metrics
 
 
-logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
+logging.basicConfig(stream=sys.stdout, format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 last_message_received_at = 0
