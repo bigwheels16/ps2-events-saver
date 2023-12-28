@@ -10,7 +10,7 @@ import config
 import metrics
 
 
-logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 last_message_received_at = 0

@@ -38,7 +38,7 @@ def create_time_series(name):
     series.resource.labels["cluster_name"] = "cluster-2"
     series.resource.labels["namespace_id"] = "TODO"
     series.resource.labels["pod_id"] = "TODO"
-    series.resource.labels["container_name"] = config.get_env_string("HOSTNAME", "local")
+    series.resource.labels["container_name"] = "TODO"
 
     series.metric.labels["application"] = "ps2-events-saver"
     series.metric.labels["instance"] = config.DB_USERNAME()
