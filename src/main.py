@@ -19,8 +19,6 @@ alt_login_threshold_seconds = 15
 min_zone_id = config.MIN_ZONE_ID()
 max_zone_id = 10000000
 
-total_events_received_ts = metrics.create_time_series("total_events_received")
-
 
 def process_message(ws, message):
     global last_message_received_at, num_messages_received
@@ -153,7 +151,7 @@ def log_num_messages_received():
     #logger.info(f"messages received: {num_messages_received:,}")
     
     try:
-        metrics.publish_time_series(total_events_received_ts, num_messages_received)
+        metrics.publish_time_series("total_events_received", num_messages_received)
     except Exception as e:
         logger.error("error sending metrics", exc_info=e)
 
@@ -194,7 +192,6 @@ if __name__ == "__main__":
                 process_message(ws, msg)
         except EOFError:
             logger.info("queue closed")
-            return
         except Exception as e:
             logger.error("error in worker", exc_info=e)
 

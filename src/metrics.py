@@ -26,26 +26,34 @@ project_name = f"projects/jkbff2"
 #    name=project_name, metric_descriptor=descriptor
 #)
 
-def create_time_series(name):
-    # https://cloud.google.com/monitoring/custom-metrics/creating-metrics#writing-ts
-    series = monitoring_v3.TimeSeries()
-    series.metric.type = f"custom.googleapis.com/ps2-events-saver/{name}"
+time_series = dict()
 
-    # https://cloud.google.com/monitoring/api/resources#tag_gke_container
-    series.resource.type = "gke_container"
-    series.resource.labels["zone"] = "us-west1-b"
-    series.resource.labels["instance_id"] = "TODO"
-    series.resource.labels["cluster_name"] = "cluster-2"
-    series.resource.labels["namespace_id"] = "TODO"
-    series.resource.labels["pod_id"] = "TODO"
-    series.resource.labels["container_name"] = "TODO"
 
-    series.metric.labels["application"] = "ps2-events-saver"
-    series.metric.labels["instance"] = config.DB_USERNAME()
+def get_time_series(name):
+    if name not in time_series:
+        # https://cloud.google.com/monitoring/custom-metrics/creating-metrics#writing-ts
+        series = monitoring_v3.TimeSeries()
+        series.metric.type = f"custom.googleapis.com/ps2-events-saver/{name}"
 
-    return series
+        # https://cloud.google.com/monitoring/api/resources#tag_gke_container
+        series.resource.type = "gke_container"
+        series.resource.labels["zone"] = "us-west1-b"
+        series.resource.labels["instance_id"] = "TODO"
+        series.resource.labels["cluster_name"] = "cluster-2"
+        series.resource.labels["namespace_id"] = "TODO"
+        series.resource.labels["pod_id"] = "TODO"
+        series.resource.labels["container_name"] = "TODO"
 
-def publish_time_series(series, value):
+        series.metric.labels["application"] = "ps2-events-saver"
+        series.metric.labels["instance"] = config.DB_USERNAME()
+        time_series[name] = series
+
+    return time_series[name]
+
+
+def publish_time_series(name, value):
+    series = get_time_series(name)
+
     now = time.time()
     seconds = int(now)
     nanos = int((now - seconds) * 10**9)
