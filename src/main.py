@@ -14,21 +14,17 @@ import metrics
 logging.basicConfig(stream=sys.stdout, format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-last_message_received_at = 0
 num_messages_received = 0
-alt_login_threshold_seconds = 15
-min_zone_id = config.MIN_ZONE_ID()
-max_zone_id = 10000000
+previous_messages_received = 0
 
 
-def process_message(ws, message):
-    global last_message_received_at, num_messages_received
-    last_message_received_at = int(time.time())
-    num_messages_received += 1
-
+def process_message(ws, message, min_zone_id, max_zone_id):
     obj = json.loads(message)
     _type = obj.get("type")
 
+    global num_messages_received
+    num_messages_received += 1
+                
     #logger.debug(message)
 
     if _type == "serviceMessage":
@@ -139,18 +135,19 @@ def on_open(ws):
     logger.info("connected!")
 
 
-def verify_messages_received():
-    time_since_last_message = int(time.time()) - last_message_received_at
-    if time_since_last_message > 60:
-        logger.error(f"no message received for {time_since_last_message}s, stopping")
-        rel.abort()
+def verify_messages_received(abort_func):
+    global num_messages_received, previous_messages_received
+    num_new_messages = num_messages_received - previous_messages_received
+    if num_new_messages < 10:
+        logger.error(f"only {num_new_messages} messages recieved since last check, stopping")
+        abort_func()
+    else:
+        previous_messages_received = num_messages_received
 
     return True
 
 
 def log_num_messages_received():
-    #logger.info(f"messages received: {num_messages_received:,}")
-    
     try:
         metrics.publish_time_series("total_events_received", num_messages_received)
     except Exception as e:
@@ -159,9 +156,11 @@ def log_num_messages_received():
     return True
 
 
-if __name__ == "__main__":
+def main():
     q = Queue(50)
-
+    min_zone_id = config.MIN_ZONE_ID()
+    max_zone_id = 10000000
+    
     def add_message(ws, msg):
         try:
             q.put(msg, block=False)
@@ -190,7 +189,7 @@ if __name__ == "__main__":
         try:
             while True:
                 msg = q.get()
-                process_message(ws, msg)
+                process_message(ws, msg, min_zone_id, max_zone_id)
         except EOFError:
             logger.info("queue closed")
         except Exception as e:
@@ -203,6 +202,10 @@ if __name__ == "__main__":
 
     ws.run_forever(dispatcher=rel)
     rel.signal(2, abort)
-    rel.timeout(21, verify_messages_received)
+    rel.timeout(21, verify_messages_received, abort)
     rel.timeout(60, log_num_messages_received)
     rel.dispatch()
+ 
+
+if __name__ == "__main__":
+   main() 

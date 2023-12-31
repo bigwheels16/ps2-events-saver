@@ -1,15 +1,25 @@
 import config
 import time
+import logging
 
 #from google.api import label_pb2 as ga_label
 #from google.api import metric_pb2 as ga_metric
 from google.cloud import monitoring_v3
 
 
+logger = logging.getLogger(__name__)
+
+
 # https://cloud.google.com/monitoring/docs/samples/monitoring-create-metric#monitoring_create_metric-python
 # https://cloud.google.com/monitoring/api/v3/kinds-and-types
-client = monitoring_v3.MetricServiceClient()
-project_name = f"projects/jkbff2"
+try:
+    client = monitoring_v3.MetricServiceClient()
+    project_name = f"projects/jkbff2"
+except Exception as e:
+    client = None
+    logger.warning("initialization of metrics client failed", exc_info=e)
+
+# https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.metricDescriptors/create
 #descriptor = ga_metric.MetricDescriptor()
 #descriptor.type = "custom.googleapis.com/test/num_messages_received"
 #descriptor.metric_kind = ga_metric.MetricDescriptor.MetricKind.CUMULATIVE
@@ -52,6 +62,9 @@ def get_time_series(name):
 
 
 def publish_time_series(name, value):
+    if not client:
+        return
+
     series = get_time_series(name)
 
     now = time.time()
