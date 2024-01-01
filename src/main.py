@@ -9,6 +9,7 @@ import logging
 import service
 import config
 import metrics
+import signal
 
 
 logging.basicConfig(stream=sys.stdout, format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
@@ -183,6 +184,7 @@ def main():
         logger.warning("shutting down")
         ws.close()
         q.close()
+        log_num_messages_received()
         rel.abort()
     
     def worker():
@@ -201,7 +203,8 @@ def main():
     #rel.set_turbo(0.0001)
 
     ws.run_forever(dispatcher=rel)
-    rel.signal(2, abort)
+    rel.signal(signal.SIGINT, abort)
+    rel.signal(signal.SIGTERM, abort)
     rel.timeout(21, verify_messages_received, abort)
     rel.timeout(60, log_num_messages_received)
     rel.dispatch()
