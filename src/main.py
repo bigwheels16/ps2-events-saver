@@ -180,8 +180,8 @@ def main():
         on_error=on_error,
         on_close=on_close)
     
-    def abort():
-        logger.warning("shutting down")
+    def abort(signal_code):
+        logger.warning(f"shutting down due to signal '{signal_code}'")
         ws.close()
         q.close()
         log_num_messages_received()
@@ -203,8 +203,8 @@ def main():
     #rel.set_turbo(0.0001)
 
     ws.run_forever(dispatcher=rel)
-    rel.signal(signal.SIGINT, abort)
-    rel.signal(signal.SIGTERM, abort)
+    rel.signal(signal.SIGINT, abort, signal.SIGINT)
+    rel.signal(signal.SIGTERM, abort, signal.SIGTERM)
     rel.timeout(21, verify_messages_received, abort)
     rel.timeout(60, log_num_messages_received)
     rel.dispatch()
