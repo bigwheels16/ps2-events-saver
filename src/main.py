@@ -141,7 +141,7 @@ def verify_messages_received(abort_func):
     num_new_messages = num_messages_received - previous_messages_received
     if num_new_messages < 5:
         logger.error(f"only {num_new_messages} messages recieved since last check, stopping")
-        abort_func()
+        abort_func(-1)
     else:
         previous_messages_received = num_messages_received
 
