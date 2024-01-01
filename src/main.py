@@ -138,7 +138,7 @@ def on_open(ws):
 def verify_messages_received(abort_func):
     global num_messages_received, previous_messages_received
     num_new_messages = num_messages_received - previous_messages_received
-    if num_new_messages < 10:
+    if num_new_messages < 5:
         logger.error(f"only {num_new_messages} messages recieved since last check, stopping")
         abort_func()
     else:
