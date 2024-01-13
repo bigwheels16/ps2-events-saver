@@ -145,7 +145,7 @@ def on_open(ws):
 
 def verify_messages_received(abort_func):
     global last_player_event_received
-    if (int(time.time()) - last_player_event_received) < 60:
+    if (int(time.time()) - last_player_event_received) > 60:
         logger.error(f"no player events recieved in last 60 seconds, stopping")
         abort_func(-1)
 
