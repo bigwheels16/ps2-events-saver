@@ -173,7 +173,7 @@ def main():
             logger.error("error adding message", exc_info=e)
 
     def on_close(ws, close_status_code, close_msg):
-        logger.warning(close_status_code, close_msg)
+        logger.warning("websocket closed: %s %s", close_status_code, close_msg)
         q.close()
 
     # websocket.enableTrace(True)
