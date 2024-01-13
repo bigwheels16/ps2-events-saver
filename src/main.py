@@ -16,7 +16,7 @@ logging.basicConfig(stream=sys.stdout, format='%(asctime)s %(levelname)s %(messa
 logger = logging.getLogger(__name__)
 
 num_messages_received = 0
-previous_messages_received = 0
+last_player_event_received = 0
 
 
 def process_message(ws, message, min_zone_id, max_zone_id):
@@ -25,6 +25,8 @@ def process_message(ws, message, min_zone_id, max_zone_id):
 
     global num_messages_received
     num_messages_received += 1
+
+    global last_player_event_received
                 
     #logger.debug(message)
 
@@ -33,6 +35,7 @@ def process_message(ws, message, min_zone_id, max_zone_id):
         event_name = payload.get("event_name")
         
         if event_name == "GainExperience":
+            last_player_event_received = int(time.time())
             if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_gain_experience_event(
                     payload["amount"],
@@ -44,6 +47,7 @@ def process_message(ws, message, min_zone_id, max_zone_id):
                     payload["world_id"],
                     payload["timestamp"])
         elif event_name == "Death":
+            last_player_event_received = int(time.time())
             if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_death_event(
                     payload["is_headshot"],
@@ -58,6 +62,7 @@ def process_message(ws, message, min_zone_id, max_zone_id):
                     payload["world_id"],
                     payload["timestamp"])
         elif event_name == "VehicleDestroy":
+            last_player_event_received = int(time.time())
             if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_vehicle_destroy_event(
                     payload["faction_id"],
@@ -81,6 +86,7 @@ def process_message(ws, message, min_zone_id, max_zone_id):
                 payload["world_id"],
                 payload["timestamp"])
         elif event_name == "PlayerFacilityDefend":
+            last_player_event_received = int(time.time())
             if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_facility_defend_event(
                     payload["character_id"],
@@ -90,6 +96,7 @@ def process_message(ws, message, min_zone_id, max_zone_id):
                     payload["world_id"],
                     payload["timestamp"])
         elif event_name == "PlayerFacilityCapture":
+            last_player_event_received = int(time.time())
             if min_zone_id < int(payload["zone_id"]) < max_zone_id:
                 service.insert_facility_capture_event(
                     payload["character_id"],
@@ -137,13 +144,10 @@ def on_open(ws):
 
 
 def verify_messages_received(abort_func):
-    global num_messages_received, previous_messages_received
-    num_new_messages = num_messages_received - previous_messages_received
-    if num_new_messages < 5:
-        logger.error(f"only {num_new_messages} messages recieved since last check, stopping")
+    global last_player_event_received
+    if (int(time.time()) - last_player_event_received) < 60:
+        logger.error(f"no player events recieved in last 60 seconds, stopping")
         abort_func(-1)
-    else:
-        previous_messages_received = num_messages_received
 
     return True
 
