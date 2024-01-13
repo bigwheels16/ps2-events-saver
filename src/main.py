@@ -184,7 +184,7 @@ def main():
         logger.warning(f"shutting down due to signal '{signal_code}'")
         ws.close()
         q.close()
-        log_num_messages_received()
+        #log_num_messages_received()
         rel.abort()
     
     def worker():
