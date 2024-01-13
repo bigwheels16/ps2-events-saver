@@ -16,7 +16,7 @@ logging.basicConfig(stream=sys.stdout, format='%(asctime)s %(levelname)s %(messa
 logger = logging.getLogger(__name__)
 
 num_messages_received = 0
-last_player_event_received = 0
+last_player_event_received = int(time.time())
 
 
 def process_message(ws, message, min_zone_id, max_zone_id):
